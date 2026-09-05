@@ -15,12 +15,13 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.cjs', 'vitest.config.ts', 'commitlint.config.js', 'dist', 'node_modules'],
+  ignorePatterns: ['.eslintrc.cjs', 'vitest.config.ts', 'commitlint.config.js', 'dist', 'node_modules', 'coverage'],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/explicit-module-boundary-types': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    'curly': ["error", 'multi-line']
   },
 };
