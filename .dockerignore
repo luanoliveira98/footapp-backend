@@ -1,0 +1,10 @@
+.git
+.husky
+.env
+node_modules
+dist
+coverage
+test
+*.md
+docker-compose.yml
+Dockerfile
