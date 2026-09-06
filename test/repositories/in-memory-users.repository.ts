@@ -1,9 +1,7 @@
 import type { User } from '@/modules/auth/domain/entities/user';
-import type { UserRepository } from '@/modules/auth/domain/repositories/user.repository';
-import type { Email } from '@/modules/auth/domain/value-objects/email';
-import type { UniqueEntityId } from '@/shared/value-objects/unique-entity-id';
+import type { UsersRepository } from '@/modules/auth/domain/repositories/users.repository';
 
-export class InMemoryUserRepository implements UserRepository {
+export class InMemoryUsersRepository implements UsersRepository {
   private items: User[] = [];
 
   async create(user: User): Promise<void> {
@@ -11,13 +9,13 @@ export class InMemoryUserRepository implements UserRepository {
     return Promise.resolve(void 0);
   }
 
-  async findByEmail(email: Email): Promise<User | null> {
-    const user = this.items.find((user) => user.email.equals(email));
+  async findByEmail(email: string): Promise<User | null> {
+    const user = this.items.find((user) => user.email.toString() === email);
     return Promise.resolve(user || null);
   }
 
-  async findById(id: UniqueEntityId): Promise<User | null> {
-    const user = this.items.find((user) => user.id.equals(id));
+  async findById(id: string): Promise<User | null> {
+    const user = this.items.find((user) => user.id.toString() === id);
     return Promise.resolve(user || null);
   }
 

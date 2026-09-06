@@ -31,7 +31,7 @@ export class Entity<Props> {
     return this._deletedAt;
   }
 
-  constructor(props: Props, configProps?: ConfigEntityProps) {
+  protected constructor(props: Props, configProps?: ConfigEntityProps) {
     this._id = configProps?.id ?? new UniqueEntityId();
     this._createdAt = configProps?.createdAt ?? new Date();
     this._updatedAt = configProps?.updatedAt ?? new Date();

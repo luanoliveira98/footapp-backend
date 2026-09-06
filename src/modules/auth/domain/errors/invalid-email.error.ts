@@ -5,6 +5,5 @@ export class InvalidEmailError extends Error implements UseCaseError {
 
   constructor(identifier?: string) {
     super(`The email <${identifier}> is invalid`);
-    this.name = 'InvalidEmailError';
   }
 }
