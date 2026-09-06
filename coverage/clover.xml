@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1788623112956" clover="3.2.0">
-  <project timestamp="1788623112956" name="All files">
-    <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0" elements="0" coveredelements="0" complexity="0" loc="0" ncloc="0" packages="0" files="0" classes="0"/>
+<coverage generated="1788651148077" clover="3.2.0">
+  <project timestamp="1788651148077" name="All files">
+    <metrics statements="11" coveredstatements="11" conditionals="12" coveredconditionals="12" methods="6" coveredmethods="6" elements="29" coveredelements="29" complexity="0" loc="11" ncloc="11" packages="2" files="2" classes="2"/>
+    <package name="entities">
+      <metrics statements="7" coveredstatements="7" conditionals="8" coveredconditionals="8" methods="3" coveredmethods="3"/>
+      <file name="entity.ts" path="C:\Users\T-GAMER\Documents\Dev\Estudo\footapp-backend\src\shared\entities\entity.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="8" coveredconditionals="8" methods="3" coveredmethods="3"/>
+        <line num="8" count="6" type="stmt"/>
+        <line num="12" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="9" type="stmt"/>
+        <line num="17" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="21" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="23" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="value-objects">
+      <metrics statements="4" coveredstatements="4" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
+      <file name="unique-entity-id.ts" path="C:\Users\T-GAMER\Documents\Dev\Estudo\footapp-backend\src\shared\value-objects\unique-entity-id.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
+        <line num="7" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="6" type="stmt"/>
+        <line num="15" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="17" count="4" type="stmt"/>
+      </file>
+    </package>
   </project>
 </coverage>
