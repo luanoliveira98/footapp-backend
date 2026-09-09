@@ -2,7 +2,7 @@ import { InvalidEmailError } from '../errors/invalid-email.error';
 import { Email } from './email';
 
 describe('Email', () => {
-  describe('constructor', () => {
+  describe('create', () => {
     it('should create an instance of Email', () => {
       const response = Email.create('test@example.com');
 
@@ -16,6 +16,15 @@ describe('Email', () => {
 
       expect(response.isLeft()).toBe(true);
       expect(response.value).toBeInstanceOf(InvalidEmailError);
+    });
+  });
+
+  describe('restore', () => {
+    it('should restore an instance of Email', () => {
+      const response = Email.restore('test@example.com');
+
+      expect(response).toBeInstanceOf(Email);
+      expect(response.toString()).toBe('test@example.com');
     });
   });
 

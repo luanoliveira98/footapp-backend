@@ -23,4 +23,8 @@ export class User extends Entity<UserProps> {
   static create(props: UserProps, configProps?: ConfigEntityProps): User {
     return new User(props, configProps);
   }
+
+  static restore(props: UserProps, configProps?: ConfigEntityProps): User {
+    return new User(props, configProps);
+  }
 }

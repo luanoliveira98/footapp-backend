@@ -14,6 +14,10 @@ export class Email {
     return right(email);
   }
 
+  static restore(value: string): Email {
+    return new Email(value);
+  }
+
   private static validate(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
