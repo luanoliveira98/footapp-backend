@@ -22,3 +22,7 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
+node_modules/
+dist/
+
+/generated/prisma

@@ -1,22 +1,6 @@
 version: '3.8'
 
 services:
-  footapp_backend:
-    build:
-      context: .
-      target: development
-    container_name: footapp_backend
-    ports:
-      - '3000:3000'
-    environment:
-      DATABASE_URL: postgres://footapp_user:footapp_password@footapp_postgres:5432/footapp_db
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    depends_on:
-      - footapp_postgres
-    command: pnpm start:dev
-
   footapp_postgres:
     image: postgres:15-alpine
     container_name: footapp_postgres
