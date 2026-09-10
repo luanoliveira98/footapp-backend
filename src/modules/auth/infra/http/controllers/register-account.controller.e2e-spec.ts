@@ -28,7 +28,7 @@ describe('Resgiter Account (e2e)', () => {
 
   test('[POST] /accounts', async () => {
     const user = makeUserFactory({
-      passwordHash: 'RawPassword123',
+      passwordHash: 'R@wPassword123',
     });
 
     const response = await request(app.getHttpServer()).post('/accounts').send({
@@ -49,7 +49,7 @@ describe('Resgiter Account (e2e)', () => {
   test('[POST] /accounts - 409', async () => {
     const userFactory = new UserFactory(prisma);
     const user = await userFactory.makePrismaUser({
-      passwordHash: 'RawPassword123',
+      passwordHash: 'R@wPassword123',
     });
 
     const response = await request(app.getHttpServer()).post('/accounts').send({
