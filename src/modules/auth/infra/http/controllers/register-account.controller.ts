@@ -10,12 +10,14 @@ import {
 } from '@nestjs/common';
 import {
   registerAccountBodySchema,
-  type RegisterAccountBodySchema,
+  ResgiterAccountDto,
 } from '../dtos/register-account.dto';
 import { Public } from '@/shared/decorators/public';
 import { ZodValidationPipe } from '@/shared/pipes/zod-validation.pipe';
 import { EmailAlreadyExistsError } from '@/modules/auth/domain/errors/email-already-exists.error';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Accounts')
 @Controller('/accounts')
 export class RegisterAccountController {
   constructor(private readonly registerAccount: RegisterAccountUseCase) {}
@@ -23,8 +25,12 @@ export class RegisterAccountController {
   @Post()
   @Public()
   @HttpCode(201)
+  @ApiOperation({ summary: 'Register a new account' })
+  @ApiResponse({ status: 201, description: 'User successfully created ' })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 409, description: 'Email already exists' })
   @UsePipes(new ZodValidationPipe(registerAccountBodySchema))
-  async handle(@Body() body: RegisterAccountBodySchema) {
+  async handle(@Body() body: ResgiterAccountDto) {
     const { name, email, password } = body;
 
     const result = await this.registerAccount.execute({
