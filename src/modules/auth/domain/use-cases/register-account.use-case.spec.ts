@@ -52,12 +52,11 @@ describe('RegisterAccountUseCase', () => {
   it('should not register an account with an existing email', async () => {
     const passwordHashed = await fakeHasher.hash(faker.internet.password());
 
-    const email = Email.create(faker.internet.email());
-    if (email.isLeft()) throw new Error('Should be right');
+    const email = Email.restore(faker.internet.email());
 
     const existingUser = User.create({
       name: faker.person.fullName(),
-      email: email.value,
+      email,
       passwordHash: passwordHashed,
     });
 
