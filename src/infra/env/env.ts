@@ -1,7 +1,7 @@
 import z from 'zod';
 
 export const envSchema = z.object({
-  PORT: z.number().optional().default(3000),
+  PORT: z.coerce.number().optional().default(3000),
   DATABASE_URL: z.url(),
 });
 

@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { PrismaClient } from '@prisma/client';
 import { randomUUID } from 'node:crypto';
 import { config } from 'dotenv';
 import { execSync } from 'node:child_process';
 import { envSchema } from '@/infra/env/env';
+import { PrismaPg } from '@prisma/adapter-pg';
 
 config({ path: '.env', override: true });
 config({ path: '.env.test', override: true });
@@ -31,7 +31,8 @@ beforeAll(() => {
 
   process.env.DATABASE_URL = databaseURL;
 
-  prisma = new PrismaClient();
+  const adapter = new PrismaPg({ connectionString: databaseURL });
+  prisma = new PrismaClient({ adapter });
 
   execSync('pnpm prisma migrate deploy');
 });

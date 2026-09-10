@@ -1,7 +1,7 @@
 import { Entity, type ConfigEntityProps } from '@/shared/entities/entity';
 import type { Email } from '../value-objects/email';
 
-interface UserProps {
+export interface UserProps {
   name: string;
   email: Email;
   passwordHash: string;

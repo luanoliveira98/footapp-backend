@@ -5,6 +5,7 @@ import { Email } from '../value-objects/email';
 import { EmailAlreadyExistsError } from '../errors/email-already-exists.error';
 import { RegisterAccountUseCase } from './register-account.use-case';
 import { FakeHasher } from 'test/cryptography/fake-hasher';
+import { InvalidEmailError } from '../errors/invalid-email.error';
 
 describe('RegisterAccountUseCase', () => {
   let sut: RegisterAccountUseCase;
@@ -49,7 +50,7 @@ describe('RegisterAccountUseCase', () => {
   });
 
   it('should not register an account with an existing email', async () => {
-    const passwordHash = await fakeHasher.hash(faker.internet.password());
+    const passwordHashed = await fakeHasher.hash(faker.internet.password());
 
     const email = Email.create(faker.internet.email());
     if (email.isLeft()) throw new Error('Should be right');
@@ -57,7 +58,7 @@ describe('RegisterAccountUseCase', () => {
     const existingUser = User.create({
       name: faker.person.fullName(),
       email: email.value,
-      passwordHash: passwordHash,
+      passwordHash: passwordHashed,
     });
 
     await inMemoryUsersRepository.create(existingUser);
@@ -72,5 +73,18 @@ describe('RegisterAccountUseCase', () => {
 
     expect(response.isLeft()).toBe(true);
     expect(response.value).toBeInstanceOf(EmailAlreadyExistsError);
+  });
+
+  it('should not register an account with an invalid email', async () => {
+    const user = {
+      name: faker.person.fullName(),
+      email: 'invalid-email',
+      password: faker.internet.password(),
+    };
+
+    const response = await sut.execute(user);
+
+    expect(response.isLeft()).toBe(true);
+    expect(response.value).toBeInstanceOf(InvalidEmailError);
   });
 });
