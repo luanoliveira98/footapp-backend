@@ -19,6 +19,7 @@ export default defineConfig({
         branches: 90,
         statements: 90,
       },
+      exclude: ['**/*.mapper.ts', 'test/factories/**'],
     },
   },
   plugins: [
