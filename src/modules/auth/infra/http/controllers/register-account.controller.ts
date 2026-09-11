@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import {
   registerAccountBodySchema,
-  ResgiterAccountDto,
+  ResgiterAccountRequestDto,
 } from '../dtos/register-account.dto';
 import { Public } from '@/shared/decorators/public';
 import { ZodValidationPipe } from '@/shared/pipes/zod-validation.pipe';
@@ -30,7 +30,7 @@ export class RegisterAccountController {
   @ApiResponse({ status: 400, description: 'Validation failed' })
   @ApiResponse({ status: 409, description: 'Email already exists' })
   @UsePipes(new ZodValidationPipe(registerAccountBodySchema))
-  async handle(@Body() body: ResgiterAccountDto) {
+  async handle(@Body() body: ResgiterAccountRequestDto) {
     const { name, email, password } = body;
 
     const result = await this.registerAccount.execute({

@@ -12,7 +12,7 @@ export const registerAccountBodySchema = z.object({
   password: z.string().regex(passwordRegex, passwordMessage),
 });
 
-export class ResgiterAccountDto {
+export class ResgiterAccountRequestDto {
   @ApiProperty({ example: 'John Doe', description: 'Full name of the user' })
   name!: string;
 
