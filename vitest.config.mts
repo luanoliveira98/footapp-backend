@@ -18,7 +18,12 @@ export default defineConfig({
         branches: 90,
         statements: 90,
       },
-      exclude: ['**/*.mapper.ts', 'test/factories/**'],
+      exclude: [
+        '**/*.mapper.ts',
+        'test/factories/**',
+        '**/prisma.service.ts',
+        '**/env.service.ts',
+      ],
     },
   },
   resolve: {

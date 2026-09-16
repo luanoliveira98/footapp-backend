@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { AppModule } from '@/app.module';
 import { PrismaService } from '@/infra/database/prisma/prisma.service';
 import type { INestApplication } from '@nestjs/common';
 import { makeUserFactory, UserFactory } from 'test/factories/make-user';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
+import { Server } from 'http';
 
 describe('Resgiter Account (e2e)', () => {
   let app: INestApplication;
@@ -31,11 +31,13 @@ describe('Resgiter Account (e2e)', () => {
       passwordHash: 'R@wPassword123',
     });
 
-    const response = await request(app.getHttpServer()).post('/accounts').send({
-      name: user.name,
-      email: user.email.toString(),
-      password: user.passwordHash,
-    });
+    const response = await request(app.getHttpServer() as unknown as Server)
+      .post('/accounts')
+      .send({
+        name: user.name,
+        email: user.email.toString(),
+        password: user.passwordHash,
+      });
 
     expect(response.statusCode).toBe(201);
 
@@ -52,11 +54,13 @@ describe('Resgiter Account (e2e)', () => {
       passwordHash: 'R@wPassword123',
     });
 
-    const response = await request(app.getHttpServer()).post('/accounts').send({
-      name: user.name,
-      email: user.email.toString(),
-      password: user.passwordHash,
-    });
+    const response = await request(app.getHttpServer() as unknown as Server)
+      .post('/accounts')
+      .send({
+        name: user.name,
+        email: user.email.toString(),
+        password: user.passwordHash,
+      });
 
     expect(response.statusCode).toBe(409);
 

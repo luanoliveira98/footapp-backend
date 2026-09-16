@@ -1,4 +1,4 @@
-import type { PrismaService } from '@/infra/database/prisma/prisma.service';
+import { PrismaService } from '@/infra/database/prisma/prisma.service';
 import { User, type UserProps } from '@/modules/auth/domain/entities/user';
 import { Email } from '@/modules/auth/domain/value-objects/email';
 import { PrismaUserMapper } from '@/modules/auth/infra/database/prisma/mappers/prisma-user.mapper';
