@@ -1,14 +1,13 @@
 import { defineConfig } from 'vitest/config';
 import swc from 'unplugin-swc';
 import path from 'path';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(import.meta.dirname, './src'),
     },
     root: './',
     coverage: {
@@ -22,10 +21,12 @@ export default defineConfig({
       exclude: ['**/*.mapper.ts', 'test/factories/**'],
     },
   },
+  resolve: {
+    tsconfigPaths: true,
+  },
   plugins: [
     swc.vite({
       module: { type: 'es6' },
     }),
-    tsconfigPaths(),
   ],
 });

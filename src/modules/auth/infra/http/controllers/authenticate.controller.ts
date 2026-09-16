@@ -1,5 +1,5 @@
 import { AuthenticateUseCase } from '@/modules/auth/domain/use-cases/authenticate.use-case';
-import { Public } from '@/shared/decorators/public';
+import { Public } from '@/infra/authentication/decorators/public';
 import { ZodValidationPipe } from '@/shared/pipes/zod-validation.pipe';
 import {
   BadRequestException,

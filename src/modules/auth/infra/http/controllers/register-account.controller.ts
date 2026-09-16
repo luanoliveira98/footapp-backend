@@ -12,7 +12,7 @@ import {
   registerAccountBodySchema,
   ResgiterAccountRequestDto,
 } from '../dtos/register-account.dto';
-import { Public } from '@/shared/decorators/public';
+import { Public } from '@/infra/authentication/decorators/public';
 import { ZodValidationPipe } from '@/shared/pipes/zod-validation.pipe';
 import { EmailAlreadyExistsError } from '@/modules/auth/domain/errors/email-already-exists.error';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
