@@ -1,5 +1,8 @@
 import type { Session } from '@/modules/auth/domain/entities/session';
-import type { SessionsRepository } from '@/modules/auth/domain/repositories/sessions.repository';
+import type {
+  SessionRepositoryDeleteRequest,
+  SessionsRepository,
+} from '@/modules/auth/domain/repositories/sessions.repository';
 import { UniqueEntityId } from '@/shared/value-objects/unique-entity-id';
 
 export class InMemorySessionsRepository implements SessionsRepository {
@@ -20,5 +23,20 @@ export class InMemorySessionsRepository implements SessionsRepository {
 
   async list(): Promise<Session[]> {
     return Promise.resolve(this.items);
+  }
+
+  async delete({
+    refreshToken,
+    userId,
+  }: SessionRepositoryDeleteRequest): Promise<void> {
+    const itemIndex = this.items.findIndex(
+      (item) =>
+        item.refreshToken.toString() === refreshToken &&
+        item.userId.toString() === userId,
+    );
+
+    if (itemIndex > -1) this.items.splice(itemIndex, 1);
+
+    return Promise.resolve(void 0);
   }
 }

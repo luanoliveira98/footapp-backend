@@ -44,11 +44,9 @@ describe('AuthenticateUseCase', () => {
     });
 
     expect(response.isRight()).toBe(true);
-    expect(response.value).toEqual({
-      accessToken,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      refreshToken: expect.any(String),
-    });
+    if (response.isLeft()) throw new Error('Should be right');
+    expect(response.value.accessToken).toEqual(accessToken);
+    expect(typeof response.value.refreshToken).toBe('string');
 
     const sessionsOnDatabase = await inMemorySessionsRepository.findByUserId(
       user.id.toString(),

@@ -6,7 +6,9 @@ export const authenticateBodySchema = z.object({
   password: z.string(),
 });
 
-export class AuthenticateRequestDto {
+type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>;
+
+export class AuthenticateRequestDto implements AuthenticateBodySchema {
   @ApiProperty({
     example: 'john.doe@example.com',
     description: 'Email address',

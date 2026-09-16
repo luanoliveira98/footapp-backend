@@ -20,7 +20,7 @@ import {
 import { WrongCredentialsError } from '@/modules/auth/domain/errors/wrong-credentials.error';
 import type { Response } from 'express';
 
-@ApiTags('Accounts')
+@ApiTags('Sessions')
 @Controller('/sessions')
 export class AuthenticateController {
   constructor(private readonly authenticate: AuthenticateUseCase) {}
@@ -40,7 +40,7 @@ export class AuthenticateController {
   async handle(
     @Body() body: AuthenticateRequestDto,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<AuthenticateResponseDto> {
+  ) {
     const { email, password } = body;
 
     const result = await this.authenticate.execute({ email, password });

@@ -3,14 +3,14 @@ import { DatabaseModule } from '@/infra/database/database.module';
 import { PrismaService } from '@/infra/database/prisma/prisma.service';
 import type { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { hash } from 'bcryptjs';
-import dayjs from 'dayjs';
-import request from 'supertest';
-import { Server } from 'http';
 import { UserFactory } from 'test/factories/make-user';
+import request from 'supertest';
+import type { Server } from 'http';
+import { hash } from 'bcryptjs';
 import type { AuthenticateResponseDto } from '../dtos/authenticate.dto';
+import cookieParser from 'cookie-parser';
 
-describe('Authenticate (e2e)', () => {
+describe('Logout (e2e)', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
@@ -28,6 +28,8 @@ describe('Authenticate (e2e)', () => {
 
     userFactory = moduleRef.get(UserFactory);
 
+    app.use(cookieParser());
+
     await app.init();
   });
 
@@ -35,34 +37,37 @@ describe('Authenticate (e2e)', () => {
     await app.close();
   });
 
-  test('[POST] /sessions', async () => {
+  test('[DELETE] /sessions', async () => {
     const user = await userFactory.makePrismaUser({
       passwordHash: await hash('123456', 12),
     });
 
-    const response = await request(app.getHttpServer() as unknown as Server)
+    const authenticatedResponse = await request(
+      app.getHttpServer() as unknown as Server,
+    )
       .post('/sessions')
-      .send({
-        email: user.email.toString(),
-        password: '123456',
-      });
+      .send({ email: user.email.toString(), password: '123456' });
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('access_token');
-    expect(typeof (response.body as AuthenticateResponseDto).access_token).toBe(
-      'string',
-    );
+    const authenticatedCookies = authenticatedResponse.get('Set-Cookie');
+    const authenticatedBody =
+      authenticatedResponse.body as AuthenticateResponseDto;
+
+    const response = await request(app.getHttpServer() as unknown as Server)
+      .delete('/sessions')
+      .set('Cookie', authenticatedCookies!)
+      .set('Authorization', `Bearer ${authenticatedBody.access_token}`)
+      .send();
+
+    console.log(response.body);
+
+    expect(response.statusCode).toBe(204);
 
     const cookies = response.get('Set-Cookie');
-    expect(cookies![0]).toContain('refresh_token=');
+    expect(cookies![0]).toContain('Expires=Thu, 01 Jan 1970 00:00:00 GMT');
 
-    const sessionOnDatabase = await prisma.session.findFirst({
+    const sessionOnDatabase = await prisma.session.findMany({
       where: { userId: user.id.toString() },
     });
-
-    expect(sessionOnDatabase).toBeTruthy();
-    expect(sessionOnDatabase?.expiresAt.getTime()).toBeGreaterThan(
-      dayjs().valueOf(),
-    );
+    expect(sessionOnDatabase).toHaveLength(0);
   });
 });
