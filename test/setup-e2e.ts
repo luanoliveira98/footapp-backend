@@ -1,43 +1,54 @@
-import { PrismaClient } from '@prisma/client';
-import { randomUUID } from 'node:crypto';
-import { config } from 'dotenv';
-import { execSync } from 'node:child_process';
 import { envSchema } from '@/infra/env/env';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from '@prisma/client';
+import { config } from 'dotenv';
+import { execSync } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
 
 config({ path: '.env', override: true });
-config({ path: '.env.test', override: true });
 
 const env = envSchema.parse(process.env);
+const tempDbName = `test_${randomUUID().replace(/-/g, '')}`;
+
+const dbUrl = new URL(env.DATABASE_URL);
+dbUrl.pathname = `/${tempDbName}`;
+const testDatabaseUrl = dbUrl.toString();
+
+process.env.DATABASE_URL = testDatabaseUrl;
+
+const rootClient = new PrismaClient({
+  adapter: new PrismaPg({ connectionString: env.DATABASE_URL }),
+});
 
 let prisma: PrismaClient;
 
-function generateUniqueDatabaseURL(schemaId: string) {
-  if (!env.DATABASE_URL) {
-    throw new Error('Please provide a DATABASE_URL environment variable.');
-  }
+beforeAll(async () => {
+  await rootClient.$executeRawUnsafe(`CREATE DATABASE "${tempDbName}"`);
+  await rootClient.$disconnect();
 
-  const url = new URL(env.DATABASE_URL);
+  execSync('pnpm prisma migrate deploy', { stdio: 'inherit' });
 
-  url.searchParams.set('schema', schemaId);
+  prisma = new PrismaClient({
+    adapter: new PrismaPg({ connectionString: testDatabaseUrl }),
+  });
 
-  return url.toString();
-}
-
-const schemaId: string = randomUUID();
-
-beforeAll(() => {
-  const databaseURL = generateUniqueDatabaseURL(schemaId);
-
-  process.env.DATABASE_URL = databaseURL;
-
-  const adapter = new PrismaPg({ connectionString: databaseURL });
-  prisma = new PrismaClient({ adapter });
-
-  execSync('pnpm prisma migrate deploy');
+  await prisma.$connect();
 });
 
 afterAll(async () => {
-  await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schemaId}" CASCADE`);
-  await prisma.$disconnect();
+  try {
+    if (prisma) await prisma.$disconnect();
+
+    await rootClient.$connect();
+    await rootClient.$executeRawUnsafe(
+      `SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${tempDbName}' AND pid <> pg_backend_pid()`,
+    );
+    await rootClient.$executeRawUnsafe(
+      `DROP DATABASE IF EXISTS "${tempDbName}"`,
+    );
+  } catch (err) {
+    console.error('Error dropping test database:', err);
+  } finally {
+    await rootClient.$disconnect();
+  }
 });

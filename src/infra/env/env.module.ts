@@ -9,6 +9,7 @@ import { envSchema } from './env';
     ConfigModule.forRoot({
       validate: (env) => envSchema.parse(env),
       isGlobal: true,
+      ignoreEnvFile: process.env.NODE_ENV === 'test',
     }),
   ],
   providers: [EnvService],

@@ -13,7 +13,10 @@ export class PrismaService
   implements OnModuleInit, OnModuleDestroy
 {
   constructor(private readonly env: EnvService) {
-    const adapter = new PrismaPg({ connectionString: env.get('DATABASE_URL') });
+    const adapter = new PrismaPg({
+      connectionString: env.get('DATABASE_URL'),
+    });
+
     super({
       log: ['warn', 'error'],
       adapter,
