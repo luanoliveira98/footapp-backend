@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { createZodDto } from 'nestjs-zod';
 import z from 'zod';
 
 const passwordRegex =
@@ -12,9 +13,9 @@ export const registerAccountBodySchema = z.object({
   password: z.string().regex(passwordRegex, passwordMessage),
 });
 
-type RegisterAccountBodySchema = z.infer<typeof registerAccountBodySchema>;
-
-export class ResgiterAccountRequestDto implements RegisterAccountBodySchema {
+export class ResgiterAccountRequestDto extends createZodDto(
+  registerAccountBodySchema,
+) {
   @ApiProperty({ example: 'John Doe', description: 'Full name of the user' })
   name!: string;
 

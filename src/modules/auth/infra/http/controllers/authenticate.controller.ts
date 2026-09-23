@@ -1,6 +1,5 @@
 import { AuthenticateUseCase } from '@/modules/auth/domain/use-cases/authenticate.use-case';
 import { Public } from '@/infra/authentication/decorators/public';
-import { ZodValidationPipe } from '@/shared/pipes/zod-validation.pipe';
 import {
   BadRequestException,
   Body,
@@ -9,11 +8,9 @@ import {
   Post,
   Res,
   UnauthorizedException,
-  UsePipes,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
-  authenticateBodySchema,
   AuthenticateResponseDto,
   type AuthenticateRequestDto,
 } from '../dtos/authenticate.dto';
@@ -36,7 +33,6 @@ export class AuthenticateController {
   })
   @ApiResponse({ status: 400, description: 'Validation failed' })
   @ApiResponse({ status: 401, description: 'Wrong credentials' })
-  @UsePipes(new ZodValidationPipe(authenticateBodySchema))
   async handle(
     @Body() body: AuthenticateRequestDto,
     @Res({ passthrough: true }) res: Response,

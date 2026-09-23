@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { createZodDto } from 'nestjs-zod';
 import z from 'zod';
 
 export const authenticateBodySchema = z.object({
@@ -6,9 +7,9 @@ export const authenticateBodySchema = z.object({
   password: z.string(),
 });
 
-type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>;
-
-export class AuthenticateRequestDto implements AuthenticateBodySchema {
+export class AuthenticateRequestDto extends createZodDto(
+  authenticateBodySchema,
+) {
   @ApiProperty({
     example: 'john.doe@example.com',
     description: 'Email address',
